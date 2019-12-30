@@ -1,0 +1,78 @@
+nav{
+    float: right;
+    ul{
+        padding: 0;
+        margin: 0;
+        display: flex;
+        .page-item.disabled .page-link{
+            border:none;
+        }
+        .disabled{
+           
+            .preIcon{
+                background-image: url("../../../../assets/img/disPre.png") ;
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+            .nextIcon{
+                background-image: url("../../../../assets/img/disNext.png") ;
+              
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+        }
+        li{
+          
+          
+            a,span,button,input{
+                width:47px;
+                padding: 0;
+                text-align: center;
+               
+                height: 38px;
+                line-height: 38px;
+                font-size: 14px;
+                border:1px solid #fff;
+                background-color: #F8F8F8;
+            }
+            span{
+                color: #333;
+                background: #fff;
+            }
+            a:hover{
+                cursor:pointer;
+            }
+            .preIcon{
+                background: url("../../../../assets/img/pre.png");
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-color: #F8F8F8;
+            }
+            .nextIcon{
+                background: url("../../../../assets/img/next.png");
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-color: #F8F8F8;
+               
+            }
+           
+            button{
+               
+                background: #F8F8F8;
+                border-radius: 4px;
+                outline: none;
+                border: none;
+            }
+            button:hover{
+                background:#6BAF36;
+                color: #fff;
+            }
+            
+        }
+        .page-item.active .page-link{
+                background-color: #6BAF36;
+                border: none;
+        }
+    }
+   
+}

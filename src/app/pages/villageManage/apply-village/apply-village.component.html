@@ -1,0 +1,125 @@
+<div class="content">
+    <form class="contentForm row"  #searchMouldForm="ngForm" >
+        <div class="form-group col-4 inputStart">
+            <label for="applyPhone">申请人手机号：</label>
+            <input type="text" class="" [(ngModel)]="searchApplyVillage.applyPhone"  name="applyPhone" #applyPhone="ngModel" placeholder="">
+        </div>
+        <div class="form-group col-4 inputCenter">
+            <label for="status">申请状态：</label>
+            <select name="status" [(ngModel)]="searchApplyVillage.status" #status>
+              <option selected value="">所有状态</option>         
+              <option value="审核不通过">审核不通过</option>
+              <option value="审核通过">审核通过</option>
+              <option value="审核中">审核中</option>
+            </select>
+        </div>
+        <div class="form-group col-4 inputEnd">
+            <label for="createTimeStart">创建时间：</label>
+            <input type="date" class=""  [(ngModel)]="searchApplyVillage.createTimeStart" name="createdTimeStart" #createdTimeStart placeholder="">
+            <label for="createTimeEnd" class="buttonCenter">至</label>
+            <input type="date" class=""  [(ngModel)]="searchApplyVillage.createTimeEnd" name="createdTimeEnd" #createdTimeEnd placeholder="">
+       
+        </div>
+       
+        <div class="form-group col-4 inputStart">
+            <label for="community">小区名称：</label>
+            <input type="text" class="" [(ngModel)]="searchApplyVillage.community"  name="community" #community="ngModel" placeholder="">
+        </div>
+        <div class="form-group col-8 inputEnd">
+            <button type="button" (click)="getApplyVillageList(1)" class="mButton mButtonGreen">查询</button>
+        </div>
+    </form>
+    <div class="dataTable">
+        <p class="tableTitle">小区申请列表</p>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>申请人手机号</th>
+                    <th>省份</th>
+                    <th>城市</th>
+                    <th>区</th>
+                    <th>小区名称</th>
+                    <th>申请时间</th>
+                    <th>状态</th>
+                    <th>操作人</th>
+                    <th>操作</th>
+                </tr>
+                
+            </thead>
+            <tbody *ngIf="this.total==0">
+                <tr >
+                    <td colspan="9">
+                        <p *ngIf="loading==false" class="noData">暂无数据······</p>
+                        <p  *ngIf="loading" class="noData">加载中······</p>
+                    </td>
+                  
+                </tr>
+               
+            </tbody>
+            <tbody *ngIf="this.total!=0">
+                <tr *ngFor="let applyVillage of applyVillageList">
+                    <td>{{applyVillage.cell_phone}}</td>
+                    <td>{{applyVillage.region}}</td>
+                    <td>{{applyVillage.city}}</td>
+                    <td>{{applyVillage.district}}</td>
+                    <td>{{applyVillage.community}}</td>
+                    <td>{{applyVillage.created_at}}</td>
+                    <td>{{applyVillage.STATUS}}</td>
+                    <td>{{applyVillage.manager_name}}</td>
+                    <td>
+                      <button *ngIf="applyVillage.STATUS=='审核中'" type="button" attr.applyId="{{applyVillage.apply_id}}" class="operation mButtonGreen"  data-toggle="modal" (click)="changeStatus($event,1)">通过</button>
+                      <button *ngIf="applyVillage.STATUS=='审核中'" type="button" attr.applyId="{{applyVillage.apply_id}}" class="operation mButtonRed"  data-toggle="modal" (click)="changeStatus($event,0)">不通过</button>
+                   
+                    </td>
+                </tr>
+                <tr >
+                    <td colspan="9" class="navRow">
+                        <span>                            
+                            共{{total}}条记录                             
+                        </span>
+                     
+                        <nav aria-label="Page navigation example">
+                            <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+                                
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                                    <a  class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+                                        
+                                    </a>
+                                </li>
+                                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                                    <a  class="page-link" (click)="setPage(page)">{{page}}</a>
+                                </li>
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                                    <a  class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                                    </a>
+                                </li>
+                               
+                                <li class="page-item">
+                                    <span>到  </span>
+                                                                    
+                                </li>
+                                <li class="page-item">
+                                    <input type="text"  class="" id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                                </li>
+                                <li class="page-item">
+                                     <span> 页 </span>   
+                                </li>
+                                <li class="page-item">
+                                    <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                                </li> 
+  
+                            </ul>
+                          
+                        </nav> 
+  
+                    </td>
+                </tr>
+               
+            </tbody>
+        </table>
+       
+        
+    </div>
+   
+  </div>
+  

@@ -1,0 +1,58 @@
+.headerFormContent{
+    background: #fff;
+    padding: 20px;
+    form{
+     
+        .formItemContent{
+
+            .formItem{
+                display: flex;
+                flex-direction: row;
+                color: #333333;
+                font-size: 14px;
+                flex-wrap: nowrap;
+                align-items: baseline;
+
+
+                label{
+                    font-size: 14px;
+                    color: #333;
+                    font-weight: 500;
+                    
+                }
+                input,select{
+                    // width: 180px;
+                    height: 38px;
+                    border:1px solid rgba(229,229,229,1);
+                    border-radius:4px;
+                  
+                }
+                input[type="text"]{
+                    min-width: 80px;
+                    width: 175px;
+                }
+                select{
+                    min-width: 80px;
+                    width: 175px;
+                }
+            }
+
+        }
+        .formItemContent:nth-child(3n+1)>.formItem{
+            justify-content: flex-start;
+        }
+        .formItemContent:nth-child(3n+2)>.formItem{
+            justify-content: center;
+        }
+        .formItemContent:nth-child(3n+0)>.formItem{
+            justify-content: flex-end;
+        }
+        .formOperation{
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+      
+    }
+}

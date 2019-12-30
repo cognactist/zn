@@ -1,0 +1,70 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .dataTable{
+    
+        .operation{
+            width: 80px;
+            height: 30px;
+            background-color: #6BAF36;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+
+        .feedbackDetail{
+            max-width: 500px;
+        
+            overflow: hidden;
+        
+            text-overflow: ellipsis;
+        
+            white-space: nowrap;
+        
+        }
+   
+    }
+}
+
+
+
+#userDetailModal{
+    .modal-content{
+        width: 400px;
+        .picBlock{
+            position: relative;
+            .enlarge{
+                position: absolute;
+                display: block;
+                width: 30px;
+                height: 30px;
+                background: url("../../../../assets/img/enlarge.png") no-repeat center;
+                background-size: 24px;
+                right: 0;
+                bottom: 0;
+                background-color: #000;
+                opacity: 0.4;
+            }
+            img{
+                width: 100%;
+            }
+        }
+
+
+
+        .autoLength{
+            white-space: nowrap;
+        }
+        
+       
+        
+    }
+    
+   
+}
+
+
+
+
+

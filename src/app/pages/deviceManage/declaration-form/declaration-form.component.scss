@@ -1,0 +1,77 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .contentForm{
+  
+      
+        .form-group{
+           
+            #userName{
+                margin-right: 60px;
+            }
+        
+        }
+       
+    }
+    .dataTable{
+ 
+        .forbid{
+            color: #FF2424;
+            img{
+                width: 14px;
+                vertical-align: middle;
+            }
+        }
+     
+       
+    }
+}
+
+
+#forbidReasonDetail{
+    text-align: center;
+    word-wrap: break-word;
+}
+#detailsModal{
+    .modal-content{
+        .alert-header{
+            .modal-title{
+                text-align: center;
+            }
+
+        }
+
+    }
+
+}
+#carousel-example-generic{
+    height: 160px;
+    width: 180px;
+    .carousel-indicators{
+        li{
+            width:10px;
+            height:8px;
+            background:rgba(255,255,255,1);
+            opacity:0.4;
+            border-radius:3px;
+            border: 0;
+           
+        }
+        .active{
+            background-color: #96D656;
+        }
+    }
+    .carousel-inner{
+        height: 100%;
+        .item {
+            height: 100%;
+            width: 100%;
+            display: block;
+            img{
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+}

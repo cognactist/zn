@@ -1,0 +1,58 @@
+.content{
+    background: #fff;
+    border-radius: 4px;
+   
+    padding: 20px;
+    .personalTitle{
+        font-size: 16px;
+        color: #333333;
+        border-left: 5px solid #6BAF36;
+        margin-left: -20px;
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+    .buttonLine{
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    p{
+        margin: 0;
+        font-size: 16px;
+        color: #333333;
+        height: 40px;
+        line-height: 40px;
+        span{
+            font-size: 14px;
+            color: #666666;
+        };
+    }
+
+  
+
+}
+
+#changeNameModal,#changePwdModal{
+    .modal-content{
+        width: 400px;
+    }
+    .sureDisabled{
+        background-color: #ccc;
+        color: #333;
+    }
+    label{
+        width: 4em;
+    }
+    .tipText{
+        display: inline-block;
+        height: 20px;
+        line-height: 20px;
+        color: #FF2424;
+        font-size: 14px;
+    }
+    .disabled{
+        background-color: #ccc;
+        color: #333;
+    }
+}
+
+

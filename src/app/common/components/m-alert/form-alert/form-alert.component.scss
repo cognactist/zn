@@ -1,0 +1,164 @@
+.alertFormContent{
+    
+    form{
+
+        .formItemContent{
+
+            .formItem{
+                margin-bottom: 20px;
+                width: 100%;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+              .inputContent{
+                  flex: 1;
+                  select[disabled]{
+                    background-color: #fff;
+                    appearance: none;
+                    -moz-appearance: none;
+                    -webkit-appearance: none;
+                }
+                input[disabled]{
+                    background-color: #fff;
+                }
+                textarea[disabled]{
+                    background-color: #fff;
+                    
+                }
+                input,select,textarea{
+                    background: #F6F6F6;
+                    height: 40px;
+                    border:none;
+                    border-radius: 4px;
+                    color: #333;
+                    font-size: 16px;
+                    width: 100%;
+                }
+                textarea{
+                    padding: 20px;
+                }
+                  
+              }
+                label{
+                    width: 6em;
+                    font-size: 16px;
+                    color: #333;
+                    font-weight: 500;
+                    text-align: left;
+                }
+                span{
+                   
+                    text-align: left;
+                    font-size: 16px;
+                }
+            }
+
+        }
+    }
+    // form{
+       
+    //     select[disabled]{
+    //         background-color: #fff;
+    //         appearance: none;
+    //         -moz-appearance: none;
+    //         -webkit-appearance: none;
+    //     }
+    //     input[disabled]{
+    //         background-color: #fff;
+    //     }
+    //     textarea[disabled]{
+    //         background-color: #fff;
+            
+    //     }
+    //     .textBaseline{
+    //         textarea{
+    //             height: auto;
+    //         }
+            
+    //     }
+    //     input,select,textarea{
+    //         background: #F6F6F6;
+    //         height: 40px;
+    //         border:none;
+    //         border-radius: 4px;
+    //         color: #333;
+    //         font-size: 16px;
+    //         flex: 1;
+    //     }
+    //     textarea{
+    //         padding: 20px;
+    //     }
+    //     .form-group{
+    //         margin-bottom: 20px;
+    //         width: 100%;
+    //         align-items: baseline;
+    //         display: flex;
+    //         flex-direction: row;
+    //         label{
+    //             font-size: 16px;
+    //             color: #333;
+    //             font-weight: 500;
+    //             text-align: left;
+    //         }
+    //         span{
+               
+    //             text-align: left;
+    //             font-size: 16px;
+    //         }
+          
+    //         #upload{
+    //             display: none;
+    //         }
+    //         #changeUpload{
+    //             display: none;
+    //         }
+    //         #uploadButton{
+            
+    //         }
+           
+    //         .imgContent{
+    //             display: flex;
+    //             .imgBlock{
+    //                position: relative;
+    //                margin-right: 30px;
+    //                 .deleteImg{
+    //                     position: absolute;
+    //                     right: 0px;
+    //                     width: 17px;
+    //                 }
+    //             }
+    //             .smallUploadImg{
+    //                 width: 80px;
+    //                 height: 80px;
+    //                 background-size: contain;
+    //                 background-repeat: no-repeat;
+                   
+    //             }
+    //             .imgBlock:nth-child(3){
+    //                 margin: 0;
+    //             }
+    //             #addImgButton{
+    //                 width: 80px;
+    //                 height: 80px;
+    //                 background: url("../../../../../assets/img/addImg.png") no-repeat;
+    //                 background-size: contain;
+    //             }
+    //             #changeImgButton{
+    //                 width: 80px;
+    //                 height: 80px;
+    //                 background: url("../../../../../assets/img/addImg.png") no-repeat;
+    //                 background-size: contain;
+    //             }
+    //         }
+    //     }
+       
+    // }
+}
+// input[regtype="phone"]{
+//     background-color: red !important;
+// }
+#tip{
+    span{
+        color: #FF2424;
+    }
+}

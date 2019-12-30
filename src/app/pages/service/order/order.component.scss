@@ -1,0 +1,154 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .contentForm{
+  
+      
+        .form-group{
+           
+            #userName{
+                margin-right: 60px;
+            }
+        
+        }
+       
+    }
+    .dataTable{
+ 
+        .forbid{
+            color: #FF2424;
+            img{
+                width: 14px;
+                vertical-align: middle;
+            }
+        }
+     
+       
+    }
+}
+
+
+#forbidModal{
+    .modal-content{
+        width: 400px;
+        .modal-body{
+            form{
+                span{
+                    width: 7rem;
+                }
+                textarea{
+           
+                    height: 160px;
+                }
+                .forbidTip{
+                    color: #FF2424;
+                    font-size: 14px;
+                    height: 20px;
+                }
+                .forbidReason{
+                    position: relative;
+                    .reasonLength{
+                        position: absolute;
+                        bottom: 0;
+                        color: #333;
+                        font-size: 14px;
+                        right: 20px;
+                        width: auto;
+                    }
+                }
+            }
+
+
+        }
+      
+        
+        
+    }
+   
+   
+   
+}
+#forbidReasonDetail{
+    text-align: center;
+    word-wrap: break-word;
+}
+#detailsModal{
+    .modal-content{
+        .alert-header{
+            .modal-title{
+                text-align: center;
+            }
+
+        }
+        .detailsImg{
+            display: flex;
+            width: 160px;
+            height: 140px;
+            overflow: hidden;
+            img{
+                width: 160px;
+                height: 140px;
+            };
+            
+        }
+
+    }
+
+}
+#carousel-example-generic{
+    height: 160px;
+    width: 180px;
+    .carousel-indicators{
+        li{
+            width:10px;
+            height:8px;
+            background:rgba(255,255,255,1);
+            opacity:0.4;
+            border-radius:3px;
+            border: 0;
+           
+        }
+        .active{
+            background-color: #96D656;
+        }
+    }
+    .carousel-inner{
+        height: 100%;
+        .item {
+            height: 100%;
+            width: 100%;
+            display: block;
+            img{
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+    
+}
+
+.pageButtonPre{
+    position: absolute;
+    left: -100px;
+    top: 50%;
+    background-color: #fff;
+    outline: none;
+    border: none;
+    background: url("../../../../assets/img/pagePre.png") no-repeat center;
+    width: 25px;
+    height: 28px;
+    background-size:contain;
+}
+.pageButtonNext{
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    background-color: #fff;
+    outline: none;
+    border: none;
+    background: url("../../../../assets/img/pageNext.png") no-repeat center;
+    width: 25px;
+    height: 28px;
+    background-size:contain;
+}

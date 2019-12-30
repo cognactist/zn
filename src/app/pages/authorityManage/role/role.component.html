@@ -1,0 +1,235 @@
+<div class="content">
+
+  <form class="contentForm">
+    <div class="form-group col-12 inputEnd">
+      <button type="button" data-toggle="modal" (click)="openAddRole()" class="mButton mButtonGreen">新增角色</button>
+
+    </div>
+
+  </form>
+
+  <div class="dataTable">
+
+    <p class="tableTitle">角色列表</p>
+    <table class="table ">
+      <thead>
+        <tr>
+          <th>角色码</th>
+          <th>角色名</th>
+          <th>操作</th>
+        </tr>
+
+      </thead>
+      <tbody *ngIf="total==0">
+        <tr>
+          <td colspan="3">
+            <p *ngIf="loading==false" class="noData">暂无数据······</p>
+            <p *ngIf="loading" class="noData">加载中······</p>
+          </td>
+
+        </tr>
+
+      </tbody>
+      <tbody *ngIf="total!=0">
+        <tr *ngFor="let role of roleList">
+          <td>{{role.code}}</td>
+          <td>{{role.name}}</td>
+
+          <td>
+            <button type="button" attr.position_code="{{role.code}}" attr.position_name="{{role.name}}"
+              attr.authority_id="{{role.authority_id}}" class="operation mButtonGreen" data-toggle="modal"
+              (click)="openChangeRole($event)">修改</button>
+
+            <button *ngIf="role.code!='admin'" type="button" attr.code="{{role.code}}" class="operation mButtonRed"
+              data-toggle="modal" (click)="openDeleteModal($event)">删除</button>
+
+
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="navRow">
+            <span>
+
+              共{{total}}条记录
+
+            </span>
+
+            <nav aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                  <a class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+
+                  </a>
+                </li>
+                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                  <a class="page-link" (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                  <a class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                  </a>
+                </li>
+
+                <li class="page-item">
+                  <span>到 </span>
+
+                </li>
+                <li class="page-item">
+                  <input type="text" id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                </li>
+                <li class="page-item">
+                  <span> 页 </span>
+                </li>
+                <li class="page-item">
+                  <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                </li>
+
+              </ul>
+
+            </nav>
+
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+  <div class="modal fade" id="changeRoleModal" tabindex="-1" role="dialog" aria-labelledby="changeRoleModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+
+          <h4 class="modal-title" id="changeRoleModalLabel">修改权限
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true"></span></button>
+
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="inputline">
+            <p>
+              <label for="originalPwd" class="">角色码：</label>
+              <input *ngIf="changeRoleInfos" type="text" class="" disabled #positionCode
+                value="{{changeRoleInfos.position_code}}" placeholder="">
+            </p>
+            <p>
+              <label for="originalPwd" class="">角色名：</label>
+              <input *ngIf="changeRoleInfos" type="text" class="" #positionName
+                value="{{changeRoleInfos.position_name}}" placeholder="">
+            </p>
+
+          </div>
+          <div id="changeTree">
+            <p>菜单权限:</p>
+            <ul *ngFor="let menu of changeMenuList">
+              <li *ngIf="menu.father_menu==0">
+
+                <input type="checkbox" class="" (click)="onfatherChange($event)" [(ngModel)]="menu.value"
+                  attr.menuId="{{menu.menu_id}}" name="{{menu.name}}">
+                <label for="{{menu.name}}" class="">{{menu.comment}}</label>
+                <ul *ngFor="let menu2 of menuList">
+                  <li *ngIf="menu2.father_menu==menu.menu_id">
+                    <input type="checkbox" class="" (click)="onChildrenChange($event)" [(ngModel)]="menu2.value"
+                      attr.menuId="{{menu2.menu_id}}" attr.fatherMenu="{{menu2.father_menu}}" name="{{menu2.name}}"
+                      id="menuId{{menu2.menu_id}}">
+                    <label for="{{menu2.name}}" class="">{{menu2.comment}}</label>
+                  </li>
+
+
+                </ul>
+              </li>
+
+            </ul>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="mButtonGreen mButton" (click)="changeRole()" data-dismiss="modal">确定</button>
+          <button type="button" class="mButtonGray mButton" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+
+          <h4 class="modal-title" id="deleteModalLabel">反馈详情
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true"></span></button>
+
+          </h4>
+        </div>
+        <div class="modal-body">
+          <img src="assets/img/deleWarning.png" alt="">
+          <div>确认删除{{deleteRoleCode}}这个角色吗？</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="deleteRole()" class="mButtonGreen mButton" data-dismiss="modal">确定</button>
+          <button type="button" class="mButtonGray mButton" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+
+          <h4 class="modal-title" id="addRoleModalLabel">新增角色
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true"></span></button>
+
+          </h4>
+
+        </div>
+        <div class="modal-body">
+          <div class="inputline">
+            <p>
+              <label for="positionCode" class="">角色码：</label>
+              <input type="text" class="" #addPositionCode placeholder="">
+            </p>
+            <p>
+              <label for="positionName" class="">角色名：</label>
+              <input type="text" class="" #addPositionName placeholder="">
+            </p>
+
+
+          </div>
+          <div id="tree">
+            <p>菜单权限:</p>
+
+            <ul *ngFor="let menu of menuList">
+              <li *ngIf="menu.father_menu==0">
+
+                <input type="checkbox" class="" (click)="onfatherChange($event)" [(ngModel)]="menu.value"
+                  attr.menuId="{{menu.menu_id}}" name="{{menu.name}}">
+                <label for="{{menu.name}}" class="">{{menu.comment}}</label>
+                <ul *ngFor="let menu2 of menuList">
+                  <li *ngIf="menu2.father_menu==menu.menu_id">
+                    <input type="checkbox" class="" (click)="onChildrenChange($event)" [(ngModel)]="menu2.value"
+                      attr.menuId="{{menu2.menu_id}}" attr.fatherMenu="{{menu2.father_menu}}" name="{{menu2.name}}"
+                      id="menuId{{menu2.menu_id}}">
+                    <label for="{{menu2.name}}" class="">{{menu2.comment}}</label>
+                  </li>
+
+
+                </ul>
+              </li>
+
+
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="mButtonGreen mButton" data-dismiss="modal" (click)="addRole()">确定</button>
+          <button type="button" class="mButtonGray mButton" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

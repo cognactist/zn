@@ -1,0 +1,270 @@
+<div class="content">
+  <form class="contentForm row" >
+      <div class="form-group col-4 inputStart">
+          <label for="searchPhone">发单人手机号：</label>
+          <input type="text" class=""  [(ngModel)]="searchOrderInfo.phone"  name="searchPhone" #searchPhone="ngModel" placeholder="">
+      </div>
+      <div class="form-group col-4 inputCenter">
+          <label for="searchStatus">订单状态：</label>
+          <select style="padding-left: 30px;" name="searchStatus" [(ngModel)]="searchOrderInfo.status"  #searchStatus="ngModel" >
+            <option selected value="">全部</option>               
+            <option value="1">待审核 </option>
+            <option value="2">待接单</option>
+            <option value="3">审核不通过</option>
+            <option value="4">已关闭</option>
+            <option value="5">已完成</option>
+            <option value="6">超时关闭</option>
+            
+        </select>
+      </div>
+      <div class="form-group col-4 inputEnd">
+          <label for="createTimeStart">发单时间：</label>
+          <input type="date" class=""   [(ngModel)]="searchOrderInfo.createTimeStart"  name="createdTimeStart" #createdTimeStart="ngModel" placeholder="">
+          <label for="createTimeEnd" class="buttonCenter">至</label>
+          <input type="date" class=""   [(ngModel)]="searchOrderInfo.createTimeEnd"  name="createdTimeEnd" #createdTimeEnd="ngModel"  placeholder="">
+      </div>
+ 
+  
+     
+      <div class="form-group col-12 inputEnd">
+          <button type="button" class="mButtonGreen mButton" (click)="searchUser()">查询</button>
+     
+         
+      </div>
+          
+     
+  </form>
+  <div class="dataTable">
+      <p class="tableTitle">订单列表</p>
+      <table class="table ">
+          <thead>
+              <tr>
+                  <th>发单人手机号</th>
+                  <th>订单标题</th>
+                  <th>小区</th>
+                  <th>发单时间</th>
+                  <th>状态</th>
+                  <th>审核人</th>
+                  <th>操作</th>
+              </tr>
+              
+          </thead>
+          <tbody *ngIf="this.total==0">
+              <tr >
+                  <td colspan="7">
+                      <p  *ngIf="loading==false" class="noData">暂无数据······</p>
+                      <p  *ngIf="loading==true" class="noData">加载中······</p>
+                  </td>
+                
+              </tr>
+             
+          </tbody>
+          <tbody *ngIf="this.total!=0">
+              <tr *ngFor="let user of userList;let i=index;">
+                  <td>{{user.cell_phone}}</td>
+                  <td>{{user.order_title}}</td>
+                  <td>{{user.community}}</td>
+                  <td>{{user.created_time|date:"y-M-dd HH:mm:ss"}}</td>
+                
+                  <!-- <td *ngIf="user.account_limit==1" class="forbid">被封号 
+                      <img class="showClickStatus" src="assets/img/forbidReason.png" (click)="showForbidReason($event)" data-toggle="modal" attr.reason="{{user.ban_reason}}" alt="封号原因">
+                  </td>
+                  <td *ngIf="user.account_limit!=1">正常</td> -->
+                  <td [ngSwitch]="user?.order_status">
+                     
+                      <span *ngSwitchCase="1">待审核</span>
+                      <span *ngSwitchCase="2">待接单</span>
+                      <span *ngSwitchCase="3">审核不通过</span>
+                      <span *ngSwitchCase="4">已关闭</span>
+                      <span *ngSwitchCase="5">已完成 </span>
+                      <span *ngSwitchCase="6">超时关闭</span>
+                      <span *ngSwitchDefault="">无</span>
+                
+                  </td>
+                  <td>{{user.manager_name}}</td>
+                  <td>
+                    <button  type="button" 
+                  
+                    class="operation mButtonGreen" attr.detailsIndex="{{i}}" data-toggle="modal" (click)="openDetails($event)">查看详情</button>
+                  </td>
+                 
+              </tr>
+              <tr >
+                  <td colspan="7" class="navRow">
+                      <span>
+                              共{{total}}条记录
+                      </span>
+                   
+                      <nav>
+                          <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+                              
+                              <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                                  <a  class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+                                      
+                                  </a>
+                              </li>
+                              <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                                  <a  class="page-link" (click)="setPage(page)">{{page}}</a>
+                              </li>
+                              <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                                  <a  class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                                  </a>
+                              </li>
+                             
+                              <li class="page-item">
+                                  <span>到  </span>
+                                                            
+                              </li>
+                              <li class="page-item">
+                                  <input type="text"  id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                              </li>
+                              <li class="page-item">
+                                   <span> 页 </span>   
+                                  
+                              </li>
+                              <li class="page-item">
+                                  <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                              </li> 
+
+                          </ul>
+                        
+                      </nav> 
+
+                  </td>
+              </tr>
+             
+          </tbody>
+      </table>
+
+  </div>
+</div>
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="alert-header">
+            
+            <h4 class="modal-title" id="detailsModalLabel">
+                <button type="button" class="pageButtonPre" (click)="changeDetails('pre')"></button>
+
+                订单详情
+                <button type="button" class="pageButtonNext" (click)="changeDetails('next')">
+
+                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+
+            </h4>
+        </div>
+        <div class="modal-body">
+            <table>
+                <tbody>
+                  <tr>
+                    <td>发单人手机号：</td>
+                    <td>{{currentDetails?.cell_phone}}</td>
+                  </tr>
+                  <tr>
+                    <td>订单标题：</td>
+                    <td>{{currentDetails?.order_title}}</td>
+                  </tr>
+                  <tr>
+                    <td >描述：</td>
+                    <td>{{currentDetails?.garbage_details}}</td>
+                  </tr>
+                  <tr *ngIf="currentDetails?.garbage_type">
+                    <td>垃圾类型：</td>
+                    <td [ngSwitch]="currentDetails?.garbage_type">
+                        <span *ngSwitchCase="A">湿垃圾 </span>
+                        <span *ngSwitchCase="B">可回收垃圾</span>
+                        <span *ngSwitchCase="C">已下线</span>
+                        <span *ngSwitchCase="D">已删除</span>
+                        <span *ngSwitchCase="E">已删除</span>
+                        <span *ngSwitchDefault="">无</span>
+      
+                      </td>
+                  </tr>
+                  <tr>
+                    <td>小区：</td>
+                    <td>{{currentDetails?.community}}</td>
+                  </tr>
+                  <tr>
+                    <td>住址：</td>
+                    <td>{{currentDetails?.address}}</td>
+                  </tr>
+                  <tr>
+                    <td>联系方式：</td>
+                    <td>
+                      <span *ngIf="currentDetails?.link_type==1||currentDetails?.link_type==3">APP私聊</span>
+                      <span *ngIf="currentDetails?.link_type==3">、</span>
+                      <span *ngIf="currentDetails?.link_type==2||currentDetails?.link_type==3">手机联系</span>
+                      
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>联系手机：</td>
+                    <td>{{currentDetails?.cell_phone}}</td>
+                  </tr>
+                  <tr *ngIf="currentDetails?.garbage_images">
+                    <td class="feedbackTop">图片：</td>
+                    <td>
+                        <div class="detailsImg">
+                           
+                            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                  
+                                    <div class="carousel-inner" role="listbox" id="listbox">
+                                      <a *ngFor="let img of (currentDetails?.garbage_images| imgArray)"  target="_blank" href="{{img}}" class="item">
+                                        <img src="{{img}}" alt="显示失败">
+                                       
+                                      </a>
+                                     
+                                   </div>
+                                  
+                               
+                                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                  </div>
+                        </div>
+                   
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>创建时间：</td>
+                    <td>{{currentDetails?.created_time|date:"y-M-dd HH:mm:ss"}}</td>
+                  </tr>
+                  <tr>
+                    <td>状态：</td>
+                 
+                    <td [ngSwitch]="currentDetails?.order_status">
+                      <span *ngSwitchCase="1">待审核 </span>
+                      <span *ngSwitchCase="2">待接单</span>
+                      <span *ngSwitchCase="3">审核不通过</span>
+                      <span *ngSwitchCase="4">已关闭</span>
+                      <span *ngSwitchCase="5">已完成</span>
+                      <span *ngSwitchCase="6">超时关闭</span>
+                      <span *ngSwitchDefault="">无</span>
+                    </td>
+                  </tr>
+                  <tr *ngIf="currentDetails?.order_status==1">
+                    <td>不通过理由：</td>
+                    <td>
+                      <input type="text" #disagreeReason>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+           
+        </div>
+        <div *ngIf="currentDetails?.order_status==1" class="modal-footer">         
+            <button type="button" class="mButton mButtonGreen"  (click)="pass(1)" >通过(上线)</button>
+            <button type="button" class="mButton mButtonGray"  (click)="pass(2)" >不通过(下线)</button>
+        </div>
+        <div *ngIf="currentDetails?.order_status!=1" class="modal-footer">         
+          <button type="button" class="mButton mButtonGreen"  data-dismiss="modal">好的</button>
+      </div>
+        </div>
+    </div>
+</div>

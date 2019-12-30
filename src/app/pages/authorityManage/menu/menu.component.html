@@ -1,0 +1,151 @@
+<div class="content">
+  <form class="contentForm row"  #searchMouldForm="ngForm" >
+      <div class="form-group col-12 inputEnd">
+          <button type="button" comment="根结点" menuId="0" data-toggle="modal" (click)="openAddMenu($event)" class="mButton mButtonGreen">新增一级菜单</button>
+      </div>
+  </form>
+  <div class="dataTable">
+      <p class="tableTitle">菜单树</p>
+      <div id="menuTree" #menuTree>
+        <ul   *ngFor="let menu of menuList">
+          <li *ngIf="menu.father_menu==0" class="row">
+           
+            <div class="col-6 menuName1"> {{menu.comment}}</div>
+            <div class="col-6 menuOperation">
+              <button type="button" attr.comment="{{menu.comment}}" attr.menuId="{{menu.menu_id}}" attr.fatherMenu="{{menu.father_menu}}" class="operation mButtonGreen"  data-toggle="modal" (click)="openAddMenu($event)">新增子节点</button>
+              <button type="button" attr.url="{{menu.url}}" attr.comment="{{menu.comment}}" attr.menuId="{{menu.menu_id}}" attr.fatherMenu="{{menu.father_menu}}" class="operation mButtonGreen"  data-toggle="modal" (click)="openChangeMenu($event)">修改</button>
+ 
+              <button type="button" attr.comment="{{menu.comment}}" attr.menuId="{{menu.menu_id}}" attr.fatherMenu="{{menu.father_menu}}" class="operation mButtonRed"  data-toggle="modal" (click)="openDeleteMenu($event)">删除</button>
+          
+            </div>
+          </li>
+          <ul  *ngFor="let menu1 of menuList">
+              <li *ngIf="menu1.father_menu==menu.menu_id" class="row">
+               
+                <div class="col-6 menuName2"> {{menu1.comment}}</div>
+                <div class="col-6 menuOperation">
+                  <button type="button" attr.url="{{menu1.url}}" attr.fatherComment="{{menu.comment}}" attr.comment="{{menu1.comment}}" attr.menuId="{{menu1.menu_id}}" attr.fatherMenu="{{menu1.father_menu}}" class="operation mButtonGreen"  data-toggle="modal" (click)="openChangeMenu($event)">修改</button>
+  
+                  <button type="button" attr.comment="{{menu1.comment}}" attr.menuId="{{menu1.menu_id}}" attr.fatherMenu="{{menu1.father_menu}}" class="operation mButtonRed"  data-toggle="modal" (click)="openDeleteMenu($event)">删除</button>
+              
+                </div>
+              </li>
+            
+              
+            </ul>
+          
+        
+          
+        </ul>
+      </div>
+      
+      
+      
+  </div>
+  <div class="modal fade" id="addChildrenModal" tabindex="-1" role="dialog" aria-labelledby="addChildrenModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+          <div class="alert-header">
+              
+              <h4 class="modal-title" id="addChildrenModalLabel">新增菜单
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+  
+              </h4>
+          </div>
+          <div class="modal-body">
+              
+            <form class="form-inline"  #addChildrenForm="ngForm">
+              <div class="form-group">
+                  <label for="fatherNode">父节点：</label>
+                  <select name="fatherNode" [(ngModel)]="addMenuInfo.fatherNode"  name="fatherNode" #fatherNode="ngModel"  >
+                     
+                      <option *ngIf="addMenuInfo.fatherNode!=0" selected value="{{addMenuInfo.menuId}}">{{addMenuInfo.selfName}}</option>
+                      <option *ngIf="addMenuInfo.fatherNode==0" selected value="0">根结点</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="menuName">名称：</label>
+                  <input type="text" class=""  [(ngModel)]="addMenuInfo.menuName"  #menuName="ngModel" name="menuName" placeholder="">
+              </div>
+              
+              <div class="form-group">
+                  <label for="menuPath">路由：</label>
+                  <input type="text"  class=""   [(ngModel)]="addMenuInfo.menuPath"  #menuPath="ngModel"  name="menuPath"  placeholder="">
+  
+              </div>
+             
+              
+            </form>
+          </div>
+          <div class="modal-footer">
+  
+              <button type="button" (click)="addMenu()"  class="mButton mButtonGreen" >确定</button>
+              <button type="button" class="mButton mButtonGray"  data-dismiss="modal">取消</button>
+          </div>
+          </div>
+      </div>
+  </div>
+  <div class="modal fade" id="changeMenuModal" tabindex="-1" role="dialog" aria-labelledby="changeMenuModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="alert-header">
+            
+            <h4 class="modal-title" id="changeMenuModalLabel">修改菜单
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+
+            </h4>
+        </div>
+        <div class="modal-body">
+            
+          <form class="form-inline"  #changeMenuForm="ngForm">
+            <div class="form-group">
+                <label for="changeFatherNode">父节点：</label>
+                <select name="fatherNode" [(ngModel)]="changeMenuInfo.fatherNode"  name="fatherNode" #fatherNode="ngModel"  >
+                    <option *ngIf="changeMenuInfo.fatherNode!=0" selected value="{{changeMenuInfo.fatherNode}}">{{changeMenuInfo.fatherName}}</option>
+                    <option *ngIf="changeMenuInfo.fatherNode==0" selected value="0">根节点</option>
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="changeMenuName">名称：</label>
+                <input type="text" class=""  [(ngModel)]="changeMenuInfo.menuName" #changeMenuName="ngModel" name="changeMenuName" placeholder="">
+            </div>
+            
+            <div class="form-group">
+                <label for="changeMenuPath">路由：</label>
+                <input type="text"  class=""   [(ngModel)]="changeMenuInfo.menuPath"  #changeMenuPath="ngModel"  name="changeMenuPath"  placeholder="">
+
+            </div>
+           
+          </form>
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" (click)="changeMenu()"  class="mButton mButtonGreen" >确定</button>
+            <button type="button" class="mButton mButtonGray"  data-dismiss="modal">取消</button>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="alert-header">
+        
+        <h4 class="modal-title" id="deleteModalLabel">删除模板
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+
+        </h4>
+      </div>
+      <div class="modal-body">
+        <img src="assets/img/deleWarning.png" alt="">
+        <div>确认删除{{deleteMenuInfo.menuName}}这个模板吗？</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  (click)="deleteMenu()" class="mButton mButtonGreen" data-dismiss="modal">确定</button>
+        <button type="button" class="mButton mButtonGray"  data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

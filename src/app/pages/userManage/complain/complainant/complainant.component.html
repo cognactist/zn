@@ -1,0 +1,302 @@
+<div class="content">
+    <form class="contentForm row" >
+        <div class="form-group col-4 inputStart">
+            <label for="applyPhone">投诉人手机号：</label>
+            <input type="text" class="" [(ngModel)]="searchComplainantList.complainantPhone"  name="complainantPhone" #complainantPhone="ngModel" placeholder="">
+
+        </div>
+        <div class="form-group col-4 inputCenter">
+            <label for="applyPhone">被投诉人手机号：</label>
+            <input type="text" class=""  [(ngModel)]="searchComplainantList.respondentPhone"  name="respondentPhone" #respondentPhone="ngModel"  placeholder="">
+        </div>
+        <div class="form-group col-4 inputEnd">
+            <label for="reason">投诉理由：</label>
+            <select name="reason"   [(ngModel)]="searchComplainantList.reason" #reason="ngModel">
+              <option selected value="">所有</option>         
+              <option value="1">色情</option>
+              <option value="2">辱骂</option>
+              <option value="3">其他行为</option>
+              <option value="4">广告</option>
+              <option value="5">欺诈</option>
+              <option value="6">违法行为（赌博、等）</option>
+            </select>
+        </div>
+        <div class="form-group col-4 inputStart">
+            <label for="createTimeStart">投诉时间：</label>
+            <input type="date" class=""   [(ngModel)]="searchComplainantList.createTimeStart"  name="createdTimeStart" #createdTimeStart placeholder="">
+            <label for="createTimeEnd" class="buttonCenter">至</label>
+            <input type="date" class=""   [(ngModel)]="searchComplainantList.createTimeEnd"  name="createdTimeEnd" #createdTimeEnd placeholder="">
+       
+        </div>
+       
+        <div class="form-group col-8 inputEnd">
+            <button type="button" (click)="getComplainantList()" class="mButton mButtonGreen">查询</button>
+            <button type="button" class="mButtonGray mButton" (click)="resetSearchData()">重置</button>
+        </div>
+    </form>
+    <div class="dataTable">
+        <p class="tableTitle">投诉列表</p>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>投诉人手机号</th>
+                    <th>被投诉人手机号</th>
+                    <th>理由</th>
+                    <th>投诉内容</th>
+                    <th>投诉时间</th>
+                    <th>操作</th>
+                </tr>
+                
+            </thead>
+            <tbody *ngIf="this.total==0">
+                <tr >
+                    <td colspan="6">
+                        <p *ngIf="loading==false" class="noData">暂无数据······</p>
+                        <p  *ngIf="loading" class="noData">加载中······</p>
+                    </td>
+                  
+                </tr>
+               
+            </tbody>
+            <tbody *ngIf="this.total!=0">
+                <tr *ngFor="let complainant of complainantList">
+                    <td>{{complainant.phone}}</td>
+                    <td>
+                      
+                        <span class="byPhoneButton" attr.byPhone="{{complainant.by_phone}}" (click)="searchRespondent($event)">{{complainant.by_phone}}</span>
+                    </td>
+                    <td >
+                        <img *ngIf="complainant.report_images.length!=0" class="imgLogo" src="assets/img/imgLogo.png" alt="">
+                        {{complainant.detail}}
+                    </td>
+                    <td *ngIf="complainant.type==1">色情</td>
+                    <td *ngIf="complainant.type==2">辱骂</td>
+                    <td *ngIf="complainant.type==3">其他行为</td>
+                    <td *ngIf="complainant.type==4">广告</td>
+                    <td *ngIf="complainant.type==5">欺诈</td>
+                    <td *ngIf="complainant.type==6">违法行为（赌博、等）</td>
+                    <td>{{complainant.created_time}}</td>
+                    <td>
+                      <button *ngIf="complainant.warning==0" type="button" attr.reportId="{{complainant.report_id}}" attr.phone="{{complainant.phone}}" attr.byPhone="{{complainant.by_phone}}"  class="operation mButtonOrange"  data-toggle="modal" (click)="openWarn($event)">发送警告</button>
+                      <button *ngIf="complainant.warning==1" type="button" attr.reportId="{{complainant.report_id}}" attr.phone="{{complainant.phone}}" attr.byPhone="{{complainant.by_phone}}"  class="operation mButtonGray"  disabled data-toggle="modal" >已发送警告</button>
+
+                      <button  type="button" 
+                      attr.phone="{{complainant.phone}}" 
+                      attr.byPhone="{{complainant.by_phone}}" 
+                      attr.imgs="{{complainant.report_images}}" 
+                      attr.createdTime="{{complainant.created_time}}" 
+                      attr.detail="{{complainant.detail}}"
+                      attr.type="{{complainant.type}}"
+                      class="operation mButtonGreen"  data-toggle="modal" (click)="openDetails($event)">查看详情</button>
+                   
+                    </td>
+                </tr>
+                <tr >
+                    <td colspan="6" class="navRow">
+                        <span>                            
+                            共{{total}}条记录                             
+                        </span>
+                     
+                        <nav aria-label="Page navigation example">
+                            <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+                                
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                                    <a  class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+                                        
+                                    </a>
+                                </li>
+                                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                                    <a  class="page-link" (click)="setPage(page)">{{page}}</a>
+                                </li>
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                                    <a  class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                                    </a>
+                                </li>
+                               
+                                <li class="page-item">
+                                    <span>到  </span>
+                                                                    
+                                </li>
+                                <li class="page-item">
+                                    <input type="text"  id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                                </li>
+                                <li class="page-item">
+                                     <span> 页 </span>   
+                                </li>
+                                <li class="page-item">
+                                    <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                                </li> 
+  
+                            </ul>
+                          
+                        </nav> 
+  
+                    </td>
+                </tr>
+               
+            </tbody>
+        </table>
+       
+        
+    </div>
+  
+     
+   
+  </div>
+  <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="alert-header">
+                
+                <h4 class="modal-title" id="detailsModalLabel">投诉详情
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+    
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tbody>
+                      <tr>
+                        <td>投诉人昵称：</td>
+                        <td>{{detailsInfo.complainantName}}</td>
+                      </tr>
+                      <tr>
+                        <td>投诉人手机号：</td>
+                        <td>{{detailsInfo.complainantPhone}}</td>
+                      </tr>
+                      <tr>
+                        <td class="feedbackTop autoLength">被投诉人昵称：</td>
+                        <td>{{detailsInfo.respondentName}}</td>
+                      </tr>
+                      <tr>
+                        <td>被投诉人手机号：</td>
+                        <td>{{detailsInfo.respondentPhone}}</td>
+                      </tr>
+                      <tr>
+                        <td>被投投诉总次数：</td>
+                        <td>{{detailsInfo.reportNum}}次</td>
+                      </tr>
+                      <tr>
+                        <td>被投诉理由：</td>
+                        <td>{{detailsInfo.type}}</td>
+                      </tr>
+                      <tr>
+                        <td>被投诉内容：</td>
+                        <td>{{detailsInfo.detail}}</td>
+                      </tr>
+                      <tr *ngIf="detailsInfo.imgs">
+                        <td class="feedbackTop">图片：</td>
+                        <td>
+                            <div class="detailsImg">
+                               
+                                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                      
+                                        <div class="carousel-inner" role="listbox" id="listbox">
+                                          <a *ngFor="let img of detailsInfo.imgs"  target="_blank" href="{{img}}" class="item">
+                                            <img src="{{img}}" alt="显示失败">
+                                           
+                                          </a>
+                                         
+                                       </div>
+                                      
+                                        <!-- Controls -->
+                                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                          <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                          <span class="sr-only">Next</span>
+                                        </a>
+                                      </div>
+                            </div>
+                       
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>创建时间：</td>
+                        <td>{{detailsInfo.createdTime}}</td>
+                      </tr>
+                      <tr>
+                        <td>已警告次数：</td>
+                        <td>{{detailsInfo.warn}}次</td>
+                      </tr>
+                      <tr>
+                        <td>是否被封号：</td>
+                        <td>{{detailsInfo.limit}}</td>
+                      </tr>
+                    </tbody>
+                </table>
+               
+            </div>
+            <div class="modal-footer">         
+                <button type="button" class="mButton mButtonGreen"  data-dismiss="modal">返回</button>
+            </div>
+            </div>
+        </div>
+    </div>
+  <div class="modal fade" id="warnModal" tabindex="-1" role="dialog" aria-labelledby="warnModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="alert-header">
+                
+                <h4 class="modal-title" id="warnModalLabel">发送警告
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+    
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline"  #addMouldForm="ngForm">
+                    <div class="form-group">
+                        <span>推送对象：</span>
+                        <input disabled type="text" class="" name="warnPhone"   [(ngModel)]="warnInfo.pushDetails" #warnPhone="ngModel"  placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <span>推送模板：</span>
+                        <select name="warnMouldName"   [(ngModel)]="warnInfo.titleId" #warnMouldName="ngModel" >
+                            
+                            <option *ngFor="let mould of mouldList" value="{{mould.title_id}}">{{mould.title_name}}</option>
+                            
+                        </select>
+                    </div>
+                    <div *ngIf="warnInfo.titleId!=''" class="selectContent">
+
+                        <div *ngFor="let mouldValue of mouldList" >
+                            
+                            <div *ngIf="mouldValue.title_id==warnInfo.titleId" class="form-group">
+                                <span>推送类型：</span>
+                                <select disabled name="warnMouldType" value="{{mouldValue.type_id}}"  #warnMouldType>
+                                    <option value="1">手机短信</option>
+                                    <option value="2">系统通知</option>
+                                </select>
+                            </div>
+                            <div *ngIf="mouldValue.title_id==warnInfo.titleId" class="form-group">
+                                <span>模板内容：</span>
+                                <textarea disabled name="warnMouldDetails" value="{{mouldValue.details}}" #warnMouldDetails>
+                
+                                </textarea>
+                            </div>
+                            <div *ngIf="(mouldValue.title_id==warnInfo.titleId)&&(mouldValue.image_url!='')" class="form-group">
+                                <span>模板配图：</span>
+                                <div class="imgContent">
+                                    <div *ngFor="let img of mouldValue.image_url " class="imgBlock">
+                                        <img class="smallUploadImg"  src="{{img}}"   alt="显示失败">
+                                    </div>
+
+                                </div>
+                                        
+                            </div>
+                        </div>
+                    </div>   
+                </form>
+            </div>
+            <div class="modal-footer">  
+                
+                <button type="button" [disabled]="warnInfo.titleId==''"   (click)="pushWarn()"  class="mButton mButtonGreen" >确定</button>
+
+                <button type="button" class="mButton mButtonGray"  data-dismiss="modal">返回</button>
+            </div>
+            </div>
+        </div>
+    </div>
+  

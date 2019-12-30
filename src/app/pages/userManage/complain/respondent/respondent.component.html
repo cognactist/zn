@@ -1,0 +1,119 @@
+<div class="content">
+    <form class="contentForm row"  #searchMouldForm="ngForm">
+        <div class="form-group col-4 inputStart">
+            <label for="applyPhone">被投诉人手机号：</label>
+            <input type="text" [(ngModel)]="searchRespondentInfo.respondentPhone"  name="respondentPhone" #respondentPhone="ngModel" class=""   placeholder="">
+        </div>
+     
+        <div class="form-group col-4 inputCenter">
+            <label for="timesStart">被投诉总次数：</label>
+            <input type="text" [(ngModel)]="searchRespondentInfo.timesStart"  name="timesStart" #timesStart="ngModel" class=""   placeholder="">
+            <label for="timesEnd" class="buttonCenter">至</label>
+            <input type="text" [(ngModel)]="searchRespondentInfo.timesEnd"  name="timesEnd" #timesEnd="ngModel" class=""   placeholder="">
+        
+        </div>
+       
+        <div class="form-group col-4 inputEnd">
+            <label for="limit">是否被封号：</label>
+            <select name="limit" [(ngModel)]="searchRespondentInfo.limit"  #limit="ngModel" #limit>
+                <option selected value="">全部</option>         
+                <option value="1">已封号</option>
+                <option value="0">未封号</option>
+                
+            </select>
+        </div>
+        <div class="form-group col-12 inputEnd">
+            <button type="button" (click)="getRespondentList()" class="mButton mButtonGreen">查询</button>
+            <button type="button" class="mButtonGray mButton" (click)="resetSearchData()">重置</button>
+
+        </div>
+    </form>
+    <div class="dataTable">
+        <p class="tableTitle">被投诉人列表</p>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>被投诉人手机号</th>
+                    <th>被投诉人昵称</th>
+                    <th>被投诉总次数</th>
+                    <th>已警告次数</th>
+                    <th>是否被封号</th>
+                   
+                    <th>操作</th>
+                </tr>
+                
+            </thead>
+            <tbody *ngIf="this.total==0">
+                <tr >
+                    <td colspan="6">
+                        <p *ngIf="loading==false" class="noData">暂无数据······</p>
+                        <p  *ngIf="loading" class="noData">加载中······</p>
+                    </td>
+                  
+                </tr>
+               
+            </tbody>
+            <tbody *ngIf="this.total!=0">
+                <tr *ngFor="let respondent of respondentList">
+                    <td>{{respondent.by_phone}}</td>
+                    <td>{{respondent.nick_name}}</td>
+                    <td>{{respondent.report_num}}</td>
+                    <td>{{respondent.warn}}</td>
+                    <td *ngIf="respondent.account_limit==1">已封号</td>
+                    <td *ngIf="respondent.account_limit!=1">未封号</td>
+                    <td>
+                      <button  type="button" attr.respondentPhone="{{respondent.by_phone}}" attr.applyId="1" class="operation mButtonGreen"  data-toggle="modal" (click)="getDetails($event)">查看投诉</button>
+                   
+                    </td>
+                </tr>
+                <tr >
+                    <td colspan="6" class="navRow">
+                        <span>                            
+                            共{{total}}条记录                             
+                        </span>
+                     
+                        <nav aria-label="Page navigation example">
+                            <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+                                
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                                    <a  class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+                                        
+                                    </a>
+                                </li>
+                                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                                    <a  class="page-link" (click)="setPage(page)">{{page}}</a>
+                                </li>
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                                    <a  class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                                    </a>
+                                </li>
+                               
+                                <li class="page-item">
+                                    <span>到  </span>
+                                                                    
+                                </li>
+                                <li class="page-item">
+                                    <input type="text"  class="btn btn-default " id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                                </li>
+                                <li class="page-item">
+                                     <span> 页 </span>   
+                                </li>
+                                <li class="page-item">
+                                    <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                                </li> 
+  
+                            </ul>
+                          
+                        </nav> 
+  
+                    </td>
+                </tr>
+               
+            </tbody>
+        </table>
+       
+        
+    </div> 
+   
+  </div>
+   

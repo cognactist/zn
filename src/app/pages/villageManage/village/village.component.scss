@@ -1,0 +1,27 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dataTable{
+   
+   
+}
+#addVillageModal{
+    .modal-content{
+        width: 400px;
+        #tipText{
+            display: inline-block;
+            height: 20px;
+            line-height: 20px;
+            color: #FF2424;
+            font-size: 14px;
+        }
+        label{
+            width: 6em;
+        }
+    }
+  
+   
+}

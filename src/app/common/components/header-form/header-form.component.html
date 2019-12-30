@@ -1,0 +1,28 @@
+<div class="headerFormContent">
+  <form  [formGroup]="form" class="row">
+
+    <div *ngFor="let question of questions" class="formItemContent col-4">
+      <div [formGroup]="form" class="formItem">
+        <label [attr.for]="question.key">{{question.label}}:</label>
+      
+        <div [ngSwitch]="question.controlType" class="">
+      
+          <input *ngSwitchCase="'textbox'" [formControlName]="question.key"
+                  [id]="question.key" [type]="question.type">
+      
+          <select [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key" >
+            <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+          </select>
+      
+        </div> 
+      
+      </div>
+      
+    </div>
+
+    <div class="formOperation">
+        <button *ngFor="let btn of operationButtons" [ngClass]="btn.cssText"  (click)="btn.opertion()"> {{btn.text}}</button>
+    </div>
+  </form>
+
+</div>

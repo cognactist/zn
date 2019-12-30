@@ -1,0 +1,35 @@
+<div class="greenBcg">
+    <img class="loginBcg" src="assets/img/loginBcg.png" alt="">
+    <div class="center">
+        <img class="loginLogo" src="assets/img/loginLogo.png" alt="">
+        <p class="sysName">文德智控管理后台登录</p>
+        <form>
+            <div class="tip">
+                <span id="tipText">
+                    <img src="assets/img/warning.png" alt="">
+                    密码或者账号信息错误，请重新输入！
+                </span>
+              
+            </div>
+            <div class="inputBlock">
+               
+                <input type="text" name="account" [(ngModel)]="account.value"  placeholder="请输入账号" #account>
+                <span class="delete" ></span>
+            </div>
+            
+            <div class="inputBlock">
+               
+                <input type="text" type="password" placeholder="请输入密码" #password>
+                <span class="delete"></span>
+            </div>
+            
+            <button class="button" type="button" (click)="userLogin(account.value,password.value)">登录</button>
+            
+        </form>
+ 
+       
+    </div>
+</div>
+<div class="whiteBcg">
+
+</div>

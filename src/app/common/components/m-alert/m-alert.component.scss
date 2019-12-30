@@ -1,0 +1,80 @@
+.mAlert{
+   
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    background:rgba(35,31,32,0.6);
+    display: none;
+    .mAlertCenter{
+       
+        height: 100%;
+        display: flex;
+        align-items: center; /*定义body的元素垂直居中*/
+        justify-content: center; /*定义body的里的元素水平居中*/
+        .mAlertContent{
+            min-width: 360px;
+            max-width: 690px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.5);
+            border-radius: 4px;
+            background-color: #fff;
+            .mAlertHeader{
+                height: 40px;
+                background-color: #6BAF36;
+                padding-left: 20px;
+                padding-right: 20px;
+                .mAlertTitle{
+                    height: 40px;
+                    line-height: 40px;
+                    font-size:16px;
+                    font-family:Source Han Sans CN;
+                    font-weight:400;
+                    color: #fff;
+                    .close{
+                        display: block;
+                        width: 18px;
+                        height: 40px;
+                        background: url('../../../../assets/img/close.png') no-repeat center;
+                        background-size: 18px;
+                    }
+                   
+                }
+
+            }
+
+            .mAlertBody{
+                padding: 40px 40px 0 40px;
+                min-height: 80px;
+                background-color: #fff;
+            }
+            .mAlertFooter{
+                
+                padding: 34px 20px;
+                min-height: 40px;
+                background-color: #fff;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                
+                button{
+                   margin-right: 0;
+                   padding: 11px 43px;
+                }
+            }
+
+        }
+
+    }
+
+}
+.mAlertShow{
+    display: block;
+}
+.mAlertHide{
+    display: none;
+}
+.mButtonGreen[disabled]{
+    background-color: #ccc;
+}

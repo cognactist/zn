@@ -1,0 +1,65 @@
+<div class="content">
+    <app-header-form [questions]="formItems" [form]="headerForm" [operationButtons]="operationButtons"></app-header-form>
+    <div class="dataTable">
+        <p class="tableTitle" >用户列表</p>
+
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>用户名称</th>
+                    <th>手机号</th>
+                    <th>性别</th>
+                    <th>城市</th>
+                    <th>小区</th>
+                    <th>账户状态</th>
+                    <th>注册时间</th>
+                    <th>操作人</th>
+                </tr>
+
+            </thead>
+            <tbody *ngIf="this.total==0">
+                <tr>
+                    <td colspan="8">
+                        <p *ngIf="loading==false" class="noData">暂无数据······</p>
+                        <p *ngIf="loading==true" class="noData">加载中······</p>
+                    </td>
+
+                </tr>
+
+            </tbody>
+            <tbody *ngIf="this.total!=0">
+                <tr *ngFor="let user of userList">
+                    <td>{{user.nick_name}}</td>
+                    <td>{{user.cell_phone}}</td>
+                    <td>{{user.gender}}</td>
+                    <td>{{user.city}}</td>
+                    <td>{{user.community}}</td>
+                    <td *ngIf="user.account_limit==1" class="forbid">被封号
+                        <img class="showClickStatus" src="assets/img/forbidReason.png"
+                            (click)="showForbidReason($event)" data-toggle="modal" attr.reason="{{user.ban_reason}}"
+                            alt="封号原因">
+                    </td>
+                    <td *ngIf="user.account_limit!=1">正常</td>
+                    <td>{{user.created_at}}</td>
+                    <td>{{user.manager_name}}</td>
+                </tr>
+                <tr>
+                    <td colspan="8" class="navRow">
+                        <span>
+                            共{{total}}条记录    
+                        </span>
+                        <app-pager [totalItems]="total" [currentPage]="pageIndex"
+                            (pageChange)="onPageChange($event)">
+                        </app-pager>
+
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<app-m-alert   [alertData]="alertData" [alertStatusData]="alertStatusData" (submitForm)="forbidUser($event)"></app-m-alert>

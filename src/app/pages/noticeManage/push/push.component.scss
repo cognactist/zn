@@ -1,0 +1,44 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+   
+}
+
+.dataTable{
+    
+   
+}
+#addPushModal,#pushDetailsModal{
+    .modal-content{
+        width: 480px;
+        textarea{
+            height: 80px;
+        }
+    }
+  
+    .selectContent{
+        border: 1px solid #F1F1F1;
+        border-radius: 4px;
+        padding: 20px 20px 0px 20px;
+        margin-bottom: 20px;
+        margin-left: -20px;
+        margin-right: -20px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+}
+
+
+
+
+
+
+.tipText{
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    color: #FF2424;
+    font-size: 14px;
+}

@@ -1,0 +1,256 @@
+<div class="content">
+  <form class="contentForm row">
+    <div class="form-group col-4 inputStart">
+      <label for="searchPhone">报修人手机号：</label>
+      <input type="text" class="" [(ngModel)]="searchDeclarationFormInfo.phone" name="searchPhone"
+        #searchPhone="ngModel" placeholder="">
+    </div>
+    <div class="form-group col-4 inputCenter">
+      <label for="searchStatus">报修单状态：</label>
+      <select style="padding-left: 30px;" name="searchStatus" [(ngModel)]="searchDeclarationFormInfo.status"
+        #searchStatus="ngModel">
+        <option selected value="">全部</option>
+        <option value="0">待核实</option>
+        <option value="1">待处理</option>
+        <option value="2">已处理</option>
+        <option value="3">核实不通过</option>
+      </select>
+    </div>
+    <div class="form-group col-4 inputEnd">
+      <label for="createTimeStart">创建时间：</label>
+      <input type="date" class="" [(ngModel)]="searchDeclarationFormInfo.createTimeStart" name="createdTimeStart"
+        #createdTimeStart="ngModel" placeholder="">
+      <label for="createTimeEnd" class="buttonCenter">至</label>
+      <input type="date" class="" [(ngModel)]="searchDeclarationFormInfo.createTimeEnd" name="createdTimeEnd"
+        #createdTimeEnd="ngModel" placeholder="">
+    </div>
+
+    <div class="form-group col-4 inputStart">
+      <label for="searchReason">异常理由：</label>
+      <select style="padding-left: 30px;" name="searchReason" [(ngModel)]="searchDeclarationFormInfo.reason"
+        #searchReason="ngModel">
+        <option selected value="">全部</option>
+        <option value="1">扫码无效</option>
+        <option value="2">箱门未关闭</option>
+        <option value="3">设备停电</option>
+        <option value="4">设备被破坏</option>
+        <option value="5">其他</option>
+      </select>
+    </div>
+
+    <div class="form-group col-8 inputEnd">
+      <button type="button" class="mButtonGreen mButton" (click)="searchDeclarationForm()">查询</button>
+
+
+    </div>
+
+
+  </form>
+  <div class="dataTable">
+    <p class="tableTitle">报修单列表</p>
+    <table class="table ">
+      <thead>
+        <tr>
+          <th>报修人手机号</th>
+          <th>异常理由</th>
+          <th>异常描述</th>
+          <th>创建时间</th>
+          <th>状态</th>
+          <th>操作人</th>
+          <th>操作</th>
+        </tr>
+
+      </thead>
+      <tbody *ngIf="this.total==0">
+        <tr>
+          <td colspan="7">
+            <p *ngIf="loading==false" class="noData">暂无数据······</p>
+            <p *ngIf="loading==true" class="noData">加载中······</p>
+          </td>
+
+        </tr>
+
+      </tbody>
+      <tbody *ngIf="this.total!=0">
+        <tr *ngFor="let declarationForm of declarationFormList;let i=index;">
+          <td>{{declarationForm.cell_phone}}</td>
+          <td *ngIf="declarationForm.error_type==0">扫码无效</td>
+          <td *ngIf="declarationForm.error_type==2">箱门未关闭</td>
+          <td *ngIf="declarationForm.error_type==3">设备停电</td>
+          <td *ngIf="declarationForm.error_type==4">设备被破坏</td>
+          <td *ngIf="declarationForm.error_type==5">其他</td>
+          <td>{{declarationForm.error_desc}}</td>
+          <td>{{declarationForm.created_at |date:"y-M-dd HH:mm:ss"}}</td>
+          <td *ngIf="declarationForm.check_status==0" style="color: #FF8A00;">待核实</td>
+          <td *ngIf="declarationForm.check_status==1" class="forbid" style="color: #FF8A00;">待处理
+            <img class="showClickStatus" src="assets/img/forbidReason.png" (click)="showForbidReason($event)"
+              data-toggle="modal" attr.reason="{{declarationForm.ban_reason}}" alt="封号原因">
+          </td>
+          <td *ngIf="declarationForm.check_status==2" style="color: #6BAF36;">已处理</td>
+          <td *ngIf="declarationForm.check_status==3" style="color: #FF2424;">不通过</td>
+          <td>{{declarationForm.manager_name}}</td>
+          <td>
+            <button type="button" class="operation mButtonGreen" attr.reportId="{{declarationForm.report_id}}"
+              attr.status="{{declarationForm.check_status}}" attr.description="{{declarationForm.error_desc}}"
+              attr.createTime="{{declarationForm.created_at}}" attr.reason="{{declarationForm.error_type}}"
+              attr.phone="{{declarationForm.cell_phone}}" attr.codeImg="{{declarationForm.device_code_img}}"
+              attr.errorImg="{{declarationForm.device_error_img}}" attr.detailsIndex="{{i}}" data-toggle="modal"
+              (click)="openDetails($event)">查看详情</button>
+          </td>
+
+        </tr>
+        <tr>
+          <td colspan="7" class="navRow">
+            <span>
+              共{{total}}条记录
+            </span>
+
+            <nav>
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                  <a class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+
+                  </a>
+                </li>
+                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                  <a class="page-link" (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                  <a class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                  </a>
+                </li>
+
+                <li class="page-item">
+                  <span>到 </span>
+
+                </li>
+                <li class="page-item">
+                  <input type="text" id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                </li>
+                <li class="page-item">
+                  <span> 页 </span>
+
+                </li>
+                <li class="page-item">
+                  <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                </li>
+
+              </ul>
+
+            </nav>
+
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="alert-header">
+
+        <h4 class="modal-title" id="detailsModalLabel">
+
+          报修单详情
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true"></span></button>
+
+        </h4>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tbody>
+            <tr>
+              <td>报修人手机号：</td>
+              <td>{{detailsInfo.phone}}</td>
+            </tr>
+            <tr>
+              <td>异常理由：</td>
+              <td *ngIf="detailsInfo?.reason==0">扫码无效</td>
+              <td *ngIf="detailsInfo?.reason==2">箱门未关闭</td>
+              <td *ngIf="detailsInfo?.reason==3">设备停电</td>
+              <td *ngIf="detailsInfo?.reason==4">设备被破坏</td>
+              <td *ngIf="detailsInfo?.reason==5">其他</td>
+            </tr>
+            <tr>
+              <td>异常描述：</td>
+              <td>{{detailsInfo.description}}</td>
+            </tr>
+            <tr>
+              <td>创建时间：</td>
+              <td>{{detailsInfo.createTime}}</td>
+            </tr>
+            <tr>
+              <td>状态：</td>
+              <td *ngIf="detailsInfo?.status==0" style="color: #FF8A00;">待核实</td>
+              <td *ngIf="detailsInfo?.status==1" style="color: #FF8A00;">待处理</td>
+              <td *ngIf="detailsInfo?.status==2" style="color: #6BAF36;">已处理</td>
+              <td *ngIf="detailsInfo?.status==3" style="color: #FF2424;">不通过</td>
+            </tr>
+            <tr>
+              <td>设备编号图片：</td>
+              <td>
+                <img style="width: 250px;" src="{{detailsInfo.codeImg}}" alt="无法显示">
+              </td>
+            </tr>
+            <tr *ngIf="detailsInfo.errorImg">
+              <td class="feedbackTop">设备图片：</td>
+              <td>
+                <div class="detailsImg">
+
+                  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+                    <div class="carousel-inner" role="listbox" id="listbox">
+                      <a *ngFor="let img of detailsInfo.errorImg" target="_blank" href="{{img}}" class="item">
+                        <img src="{{img}}" alt="显示失败">
+
+                      </a>
+
+                    </div>
+
+
+                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+            <tr *ngIf="detailsInfo.status==0">
+              <td>不通过理由：</td>
+              <td>
+                <input type="text" #disagreeReason>
+              </td>
+            </tr>
+
+
+          </tbody>
+        </table>
+
+      </div>
+      <div *ngIf="detailsInfo.status==0" class="modal-footer">
+        <button type="button" class="mButton mButtonGreen" (click)="changeStatus('pass')">通过(上线)</button>
+        <button type="button" class="mButton mButtonGray" (click)="changeStatus('nopass')">不通过(下线)</button>
+      </div>
+      <div *ngIf="detailsInfo.status==2||detailsInfo.status==3" class="modal-footer">
+        <button type="button" class="mButton mButtonGreen" data-dismiss="modal">好的</button>
+
+      </div>
+      <div *ngIf="detailsInfo.status==1" class="modal-footer">
+        <button type="button" class="mButton mButtonGreen" (click)="changeStatus('pass')">处理完成</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>

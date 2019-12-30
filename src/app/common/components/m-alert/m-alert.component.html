@@ -1,0 +1,26 @@
+<div class="mAlert" id="" #mAlert [ngClass]="{'mAlertShow':alertStatus}">
+  <div class="mAlertCenter">
+    <div class="mAlertContent">
+        <div class="mAlertHeader">
+          <p class="mAlertTitle">{{alertData.title}}
+            <span class="close" (click)="closeAlert()"></span>
+          </p>
+        </div>
+        <div class="mAlertBody">
+
+         <div #con></div>
+        </div>
+        <div *ngIf="alertData.type!='check'" class="mAlertFooter">
+            <button type="button" 
+                    (click)="sure()" [disabled]="sureIsGreen" class="mButton mButtonGreen">确定</button>
+            <button type="button" class="mButton mButtonGray" (click)="closeAlert()">取消</button>
+        </div>
+        <div *ngIf="alertData.type=='check'" class="mAlertFooter">
+          
+          <button type="button" class="mButton mButtonGreen" (click)="closeAlert()">返回</button>
+      </div>
+    </div>
+   
+  </div>
+
+</div>

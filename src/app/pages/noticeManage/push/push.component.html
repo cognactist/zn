@@ -1,0 +1,281 @@
+<div class="content">
+  <form class="row contentForm"  #searchMouldForm="ngForm">
+      <div class="form-group col-4 inputStart">
+          <label for="titleName">模板名称：</label>
+          <input type="text" class="" [(ngModel)]="searchPush.titleName"  name="titleName" #titleName="ngModel" placeholder="">
+      </div>
+      <div class="form-group col-4 inputCenter">
+          <label for="typeId">推送类型：</label>
+          <select name="typeId" [(ngModel)]="searchPush.typeId" #typeId>
+            <option selected value="">所有类型</option>         
+            <option value="1">手机短信</option>
+            <option value="2">系统通知</option>
+           
+          </select>
+      </div>
+      <div class="form-group col-4 inputEnd">
+        <label for="pushObject">推送对象：</label>
+        <input type="text" class="" [(ngModel)]="searchPush.pushObject"  name="pushObject" #community="ngModel" placeholder="">
+    </div>
+      <div class="form-group col-4 inputStart">
+          <label for="createTimeStart">创建时间：</label>
+          <input type="date" class=""  [(ngModel)]="searchPush.createTimeStart" name="createdTimeStart" #createdTimeStart placeholder="">
+          <label for="createTimeEnd" class="buttonCenter">至</label>
+          <input type="date" class=""  [(ngModel)]="searchPush.createTimeEnd" name="createdTimeEnd" #createdTimeEnd placeholder="">
+      
+     </div>
+      
+      <div class="form-group col-8 inputEnd">
+          <button type="button" (click)="getPushList(1)" class="mButton mButtonGreen">查询</button>
+          <button type="button" data-toggle="modal" (click)="openAddPush()" class="mButton mButtonGreen">新增推送</button>
+      </div>
+  </form>
+  <div class="dataTable">
+      <p class="tableTitle">推送列表</p>
+      <table class="table ">
+          <thead>
+              <tr>
+                  <th>模版名称</th>
+                  <th>推送类型</th>
+                  <th>推送对象</th>
+                  <th>推送理由</th>
+                  <th>推送时间</th>
+                  <th>操作人</th>
+                  <th>操作</th>
+              </tr>
+              
+          </thead>
+          <tbody *ngIf="this.total==0">
+              <tr >
+                  <td colspan="7">
+                      <p *ngIf="loading==false" class="noData">暂无数据······</p>
+                      <p  *ngIf="loading" class="noData">加载中······</p>
+                  </td>
+                
+              </tr>
+             
+          </tbody>
+          <tbody *ngIf="this.total!=0">
+              <tr *ngFor="let push of pushList">
+                  <td>{{push.title_name}}</td>             
+                  <td *ngIf="push.type_id==1">手机短信</td>
+                  <td *ngIf="push.type_id==2">系统通知</td>
+                  <td *ngIf="push.push_type==1">全体用户</td>
+                  <td *ngIf="push.push_type==2">指定用户</td>
+                  <td>{{push.reason}}</td>
+                  <td>{{push.created_at}}</td>
+                  <td>{{push.user_name}}</td>
+                
+                  <td>
+                    <button 
+                    attr.titleName="{{push.title_name}}" 
+                    attr.mouldType="{{push.type_id}}"
+                    attr.details="{{push.details}}"
+                    attr.pushType="{{push.push_type}}"
+                    attr.reason="{{push.reason}}"
+                    attr.imgs="{{push.image_url}}"
+                    attr.phone="{{push.push_object}}"
+                    type="button" class="operation mButtonGreen"  data-toggle="modal" (click)="openPushDetails($event)">查看</button>
+                 
+                  </td>
+              </tr>
+              <tr >
+                  <td colspan="7" class="navRow">
+                      <span>                            
+                          共{{total}}条记录                             
+                      </span>
+                   
+                      <nav aria-label="Page navigation example">
+                          <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+                              
+                              <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                                  <a  class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+                                      
+                                  </a>
+                              </li>
+                              <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                                  <a  class="page-link" (click)="setPage(page)">{{page}}</a>
+                              </li>
+                              <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                                  <a  class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                                  </a>
+                              </li>
+                             
+                              <li class="page-item">
+                                  <span>到  </span>
+                                                                  
+                              </li>
+                              <li class="page-item">
+                                  <input type="text"   id="pageNumber" name="pageNumber" #pageNumber value="{{pager.currentPage}}">
+                              </li>
+                              <li class="page-item">
+                                   <span> 页 </span>   
+                              </li>
+                              <li class="page-item">
+                                  <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                              </li> 
+
+                          </ul>
+                        
+                      </nav> 
+
+                  </td>
+              </tr>
+             
+          </tbody>
+      </table>
+     
+      
+  </div>
+  
+</div>
+<div class="modal fade" id="addPushModal" tabindex="-1" role="dialog" aria-labelledby="addPushModalLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      <div class="alert-header">
+          
+          <h4 class="modal-title" id="addPushModalLabel">新增推送
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+
+          </h4>
+      </div>
+      <div class="modal-body">
+          
+          <form class="form-inline"  #addMouldForm="ngForm">
+          <div class="form-group">
+              <span>模板类型：</span>
+              <select name="addPushMouldName"   [(ngModel)]="addPushInfo.titleId" #addPushMouldName="ngModel" >
+                 
+                  <option *ngFor="let mould of mouldList" value="{{mould.title_id}}">{{mould.title_name}}</option>
+                  
+              </select>
+          </div>
+          <div *ngIf="addPushInfo.titleId!=''" class="selectContent">
+                <div *ngFor="let mouldValue of mouldList" >
+             
+                    <div *ngIf="mouldValue.title_id==addPushInfo.titleId" class="form-group">
+                        <span>推送类型：</span>
+                        <select name="addPushMouldType"  disabled  value="{{mouldValue.type_id}}" #addPushMouldType>
+                            <option value="1">手机短信</option>
+                            <option value="2">系统通知</option>
+                        </select>
+                    </div>
+                    <div *ngIf="mouldValue.title_id==addPushInfo.titleId" class="form-group">
+                        <span>模板内容：</span>
+                        <textarea disabled name="addPushMouldDetails"  value="{{mouldValue.details}}" #addPushMouldDetails>
+        
+                        </textarea>
+                    </div>
+                    <div *ngIf="mouldValue.title_id==addPushInfo.titleId&&mouldValue.image_url!=''" class="form-group">
+                        <span>模板配图：</span>
+                        <div class="imgContent">
+                            <div *ngFor="let img of mouldValue.image_url; let i=index; " class="imgBlock">
+                                <img class="smallUploadImg"  src="{{img}}"   alt="无法显示">
+                            </div>
+                        </div>
+        
+                    </div>
+              </div>
+           
+           
+          </div>
+          <div class="form-group">
+            <span >推送对象：</span>
+            <select  name="addPushType" [(ngModel)]="addPushInfo.pushType"  #addPushType="ngModel" >
+                 
+                <option value="1">全体用户</option>
+                <option value="2">指定用户</option>
+            </select>
+            
+          </div>
+          <div *ngIf="addPushInfo.pushType==2" class="form-group">
+            <span style="width: 100%;">用户手机号:（每行一个，最多二十个）</span>
+            <textarea required  style="width: 100%;" name="addPushDetails"  [(ngModel)]="addPushInfo.pushDetails"  #addPushDetails="ngModel"></textarea>
+           
+        </div>
+          <div class="form-group">
+            <span>推送理由：</span>
+            <input type="text" maxlength=100 class="" [(ngModel)]="addPushInfo.reason"  name="addPushReason" #addPushReason="ngModel" placeholder="">
+           
+          </div>
+        
+      </form>
+      </div>
+      <div class="modal-footer">
+
+          <button type="button" [disabled]="addPushInfo.reason==''||addPushInfo.titleId==''||addPushInfo.pushType==''||(addPushInfo.pushDetails===''&&addPushInfo.pushType=='2')||(addPushInfo.pushDetails===undefined&&addPushInfo.pushType=='2')" (click)="addPush()"  class="mButton mButtonGreen" >确定</button>
+          <button type="button" class="mButton mButtonGray"  data-dismiss="modal">取消</button>
+      </div>
+      </div>
+  </div>
+</div>
+<div class="modal fade" id="pushDetailsModal" tabindex="-1" role="dialog" aria-labelledby="pushDetailsModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="alert-header">
+            
+            <h4 class="modal-title" id="pushDetailsModalLabel">查看推送
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+  
+            </h4>
+        </div>
+        <div class="modal-body">
+            
+            <form class="form-inline"  #pushDetailsMouldForm="ngForm">
+            <div class="form-group">
+                <span for="">模板类型：</span>
+                <input disabled type="text" class="" name="detailsMouldName"  value="{{pushDetailsInfo.titleName}}" #detailsMouldName  placeholder="">
+
+            </div>
+            <div class="selectContent" >
+             
+              <div class="form-group">
+                  <span>推送类型：</span>
+                  <select disabled name="detailsMouldType"  value="{{pushDetailsInfo.mouldType}}" #detailsMouldType>
+                      <option value="1">手机短信</option>
+                      <option value="2">系统通知</option>
+                    
+                  </select>
+              </div>
+              <div class="form-group">
+                  <span>模板内容：</span>
+                  <textarea disabled name="detailsMouldDetails"  value="{{pushDetailsInfo.mouldDetails}}" #detailsMouldDetails>
+  
+                  </textarea>
+              </div>
+              <div class="form-group">
+                  <span>模板配图：</span>
+                  <div class="imgContent">
+                    <div *ngFor="let img of pushDetailsInfo.mouldImgs; let i=index; " class="imgBlock">
+                        <img class="smallUploadImg"  src="{{img}}"   alt="无法显示">
+                    </div>
+                    </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <span >推送对象：</span>
+              <select disabled name="detailsPushType" value="{{pushDetailsInfo.pushType}}" #detailsPushType >
+                   
+                  <option value="1">全体用户</option>
+                  <option value="2">指定用户</option>
+              </select>
+            </div>
+            <div *ngIf="pushDetailsInfo.pushType==2" class="form-group">
+              <span style="width: 100%;">用户手机号:（每行一个，最多二十个）</span>
+              <textarea style="width: 100%;" disabled name="detailsPushDeatils" value="{{pushDetailsInfo.pushDetails}}"></textarea>
+            </div>
+            <div class="form-group">
+              <span>推送理由：</span>
+              <input disabled type="text" class="" value="{{pushDetailsInfo.reason}}"  name="detailsPushReason" #detailsPushReason placeholder="">
+          
+            </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" class="mButton mButtonGreen"  data-dismiss="modal">返回</button>
+        </div>
+        </div>
+    </div>
+  </div>
+  

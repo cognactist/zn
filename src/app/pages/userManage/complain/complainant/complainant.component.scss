@@ -1,0 +1,82 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    .byPhoneButton{
+        
+        color: #96D656;
+    }
+    .byPhoneButton:hover{
+        cursor: pointer;
+
+    }
+   
+}
+
+#detailsModal,#warnModal{
+    .modal-content{
+        width: 400px;
+    }
+    .modal-body{
+       
+        form{
+           
+            textarea{
+                height: 80px;
+            }
+        }
+        .selectContent{
+            border: 1px solid #F1F1F1;
+            border-radius: 4px;
+            padding: 20px 20px 0px 20px;
+            margin-bottom: 20px;
+            margin-left: -20px;
+            margin-right: -20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .detailsImg{
+            display: flex;
+            width: 160px;
+            height: 140px;
+            overflow: hidden;
+            img{
+                width: 160px;
+                height: 140px;
+            };
+            
+        }
+    }
+}
+
+
+
+
+#carousel-example-generic{
+    height: 160px;
+    width: 180px;
+    .carousel-indicators{
+        li{
+            width:10px;
+            height:8px;
+            background:rgba(255,255,255,1);
+            opacity:0.4;
+            border-radius:3px;
+            border: 0;
+           
+        }
+        .active{
+            background-color: #96D656;
+        }
+    }
+    .carousel-inner{
+        height: 100%;
+        .item {
+            height: 100%;
+            img{
+                height: 100%;
+                // width: 100%;
+            }
+        }
+    }
+}

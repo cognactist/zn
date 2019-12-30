@@ -1,0 +1,107 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+}
+
+.dataTable{
+   
+    #menuTree{
+        .menuOperation{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+        >ul{
+            padding: 0;
+            
+            >li{
+                padding: 0;
+                height: 48px;
+                font-size:16px;
+                color: #333;
+                background: #E5E5E5;
+                align-items: center;
+                margin: 0;
+                .menuName1{
+                    text-indent: 2em;
+                }
+              
+               
+                .menuOperation{
+                   
+                }
+              
+            }
+            >ul{
+                padding: 0;
+                >li{
+                    padding: 0;
+                    height: 48px;
+                    color: #333;
+                    font-size: 14px;
+                    align-items: center;
+                    margin: 0;
+                    .menuName2{
+                        text-indent: 4em;
+                    }
+                }
+            }
+        }
+    }
+   
+    // table{
+    //    .noData{
+    //        text-align: center;
+
+    //    }
+    //     tr{
+    //         height: 3rem;
+    //         th{
+    //             border-right: 1px solid #fff;
+    //             background: #E5E5E5;
+    //             font-size: 16px;
+    //         }
+    //         td{
+    //             border-right: 1px solid #fff;
+    //             font-size: 14px;
+               
+    //             .agree{
+    //                 background-color: #6BAF36;
+    //             }
+    //             .disagree{
+    //                 background-color: #FF6161;
+    //             }
+    //         }
+    //     }
+    //     tbody{
+
+    //         tr:nth-child(even){
+    //             background-color: #F6F6F6;
+    //         }
+    //         button{
+    //             border: none;
+    //             outline: none;
+    //             background: none;
+    //         }
+    //     }
+
+        
+      
+    // }
+   
+}
+#deleteModal,#addChildrenModal,#changeMenuModal{
+    .modal-content{
+        width: 400px;
+        .modal-body{
+            label{
+                width: 4em;
+            }
+            text-align: center;
+        }
+    }
+   
+}
+

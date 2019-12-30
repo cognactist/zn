@@ -1,0 +1,85 @@
+<div class="content">
+  <div class="personalTitle">个人信息</div>
+  <p>账号：<span>{{userAccount}}</span></p>
+  <p>昵称：<span>{{managerName}}</span></p>
+  <p>角色：<span>{{positionName}}</span></p>
+  <div class="buttonLine">
+      <button type="button" data-toggle="modal" data-target="#changeNameModal" class="mButton mButtonGreen" >修改昵称</button>
+      <button type="button" data-toggle="modal" (click)="openChangePwdModal()" class="mButton mButtonGreen" >修改密码</button>
+     
+  </div>
+ 
+  <!-- Modal -->
+  <div class="modal fade" id="changeNameModal" tabindex="-1" role="dialog" aria-labelledby="changeNameModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+         
+          <h4 class="modal-title" id="changeNameModalLabel">修改昵称
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+
+          </h4>
+        </div>
+        <div class="modal-body">
+          <form name="changeName" #changeNameForm="ngForm">
+              <div class="form-group">
+                  <label for="manager_name" class="">昵称：</label>
+                  <input type="text" class="" name="changeManagerName" value="{{changeManagerName}}"  [(ngModel)]="changeManagerName"  (ngModelChange)="onChangeName(manager_name.value)"  #manager_name="ngModel">
+                
+              </div>
+           
+          </form>
+
+          
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" disabled #sure [ngClass]="{disabled:changeManagerName==''}"   (click)="changeName(manager_name.value)" class="sure" data-dismiss="modal">确定</button> -->
+
+          <button type="button" [disabled]="changeNameDisabled"  (click)="changeName(manager_name.value)" class="mButtonGreen mButton" data-dismiss="modal">确定</button>
+          <button type="button" class="mButtonGray mButton"  data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="changePwdModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+          
+          <h4 class="modal-title" id="changePwdModalLabel">修改密码
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+
+          </h4>
+        </div>
+        <div class="modal-body">
+            <form   name="pwd" #pwd="ngForm">
+              <div class="tipText"  #tipText></div>
+              <div class="form-group">
+                <label for="originalPwd" class="">原密码：</label>
+                <input type="password" class=""  required name="originalPwdValue" [(ngModel)]="originalPwdValue" value="{{originalPwdValue}}" (ngModelChange)="onChangePwd()"  #originalPwd="ngModel" placeholder="请输入账号原密码">
+
+              </div>
+              <div class="form-group">
+                <label for="newPwd" class="">新密码：</label>
+                <input type="password" class="" name="newPwdValue" [(ngModel)]="newPwdValue" value="{{newPwdValue}}"   (ngModelChange)="onChangePwd()"  #newPwd placeholder="请输入新密码">
+              </div>
+              <div class="form-group lastLine">
+                <label for="repeatNewPwd" ></label>
+                <input type="password" class=""  name="repeatNewPwdValue" [(ngModel)]="repeatNewPwdValue" value="{{repeatNewPwdValue}}"  (ngModelChange)="onChangePwd()" #repeatNewPwd placeholder="请再次输入新密码">
+            
+              </div>
+              <div class="tipText">*密码长度需大于6位。</div>
+           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" [disabled]="changePwdDisabled" class="mButton mButtonGreen"  (click)="changePwd(originalPwd.value,newPwd.value,repeatNewPwd.value)">确定</button>
+
+          <!-- <button type="button" disabled class="mButton mButtonGreen" #changePwdSure (click)="changePwd(originalPwd.value,newPwd.value,repeatNewPwd.value)">确定</button> -->
+          <button type="button" class="mButton mButtonGray"  data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

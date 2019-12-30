@@ -1,0 +1,31 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+   
+}
+
+.dataTable{
+    background: #fff;
+    margin-top: 1.68rem;
+    padding: 2rem;
+    
+    flex: 1;
+    
+   
+}
+
+.tipText{
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    color: #FF2424;
+    font-size: 14px;
+}
+#addMouldModal{
+    .modal-body{
+        form{
+            height: auto;
+        }
+    }
+}

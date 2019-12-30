@@ -1,0 +1,52 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.dataTable{
+   
+    
+   
+}
+#addRoleModal,#changeRoleModal{
+    .modal-content{
+        width: 690px;
+        input[type="text"]{
+            background: #F6F6F6;
+            height: 40px;
+            border:none;
+            border-radius: 4px;
+            color: #333;
+            font-size: 16px;
+            
+        }
+
+    }
+    
+}
+#deleteModal{
+    .modal-body{
+        text-align: center;
+       
+        img{
+            width: 60px;
+        }
+    }
+}
+#tree,#changeTree{
+    p{
+        font-size: 16px;
+    }
+    color: #000;
+    height: 340px;
+    overflow: scroll;
+    border: 1px solid#F6F6F6;
+    padding: 20px;
+
+}
+.inputline{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

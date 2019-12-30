@@ -1,0 +1,37 @@
+ul{
+    height:55px;
+    background-color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    li{
+        flex: 1;
+        a{
+            font-size: 16px;
+            color: #666666;
+            line-height: 55px;
+            height: 55px;
+            padding: 0;
+        }
+        .active{
+            color: #6BAF36;
+            position: relative;
+        }
+        .active::before{
+            display: block;
+            content: "";
+            width: 200px;
+            height: 6px;
+            background-color: #6BAF36;
+            border-radius: 3px;
+            position: absolute;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+        }
+    };
+   
+    
+}

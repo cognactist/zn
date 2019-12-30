@@ -1,0 +1,64 @@
+
+<div class="homePanel">
+    <div class="topbar">
+        <img src="assets/img/loginLogo.png" alt="文德智控">
+        <span>文德智控管理后台</span>
+    
+        <div class="topbarRight">
+           
+            <button id="loginOut" (click)="loginOut()">
+                <img src="assets/img/loginOut.png" alt="">
+                <span>退出登录</span>
+            </button>
+           
+       
+        </div>
+    </div>
+
+    <div class="content">
+        <ul class="nav flex-column">
+            <li class="userInfo">
+                <div class="userInfoImg">
+                    <img src="assets/img/userLogo.png" alt="">
+                </div>
+                
+                <div class="userInfoText">
+                    <p class="company">文德智控</p>
+                    <p class="role">{{positionName}}</p>
+                </div>
+            </li>
+            <li class="nav-item" >
+                <a class="nav-link titleBig"  routerLink="./personal"  routerLinkActive="active">
+                   
+                    首页
+                </a>       
+               
+            </li>
+            <li *ngFor="let menu of menuInfo" class="nav-item fatherNav" >
+                <a  class="nav-link titleBig"  routerLink="./{{menu.path}}" routerLinkActive="active">
+    
+                   {{menu.name}}
+                </a>  
+                <ul class="childNav">
+                    <li *ngFor="let childMenu of menu.children" class="nav-item" >
+                        <a class="nav-link titleSmall"   routerLink="./{{childMenu.path}}"  routerLinkActive="active">
+                           
+                            {{childMenu.name}}
+                        </a>              
+                          
+                    </li>
+                </ul>    
+             
+            </li>
+          
+           
+           
+        </ul>
+        <div class="dataContent">
+            <router-outlet></router-outlet>
+        </div>
+    
+    </div>
+
+   
+</div>

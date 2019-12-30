@@ -1,0 +1,31 @@
+<div class="alertFormContent">
+  <form [formGroup]="form" #alertForm class="column">
+    <div #tip id="tip">
+      <span id="tipText" *ngIf="form.invalid && (form.dirty || form.touched)">{{tipText}}</span>
+
+    </div>
+    <div *ngFor="let question of questions" class="formItemContent">
+      <div [formGroup]="form" class="formItem">
+        <label [attr.for]="question.key">{{question.label}}:</label>
+
+        <div [ngSwitch]="question.controlType" class="inputContent">
+
+          <!-- <input *ngSwitchCase="'textbox'"  inputPhoneReg="question?.regType=='phone'" attr.regtype="{{question?.regType}}"   [formControlName]="question.key" [id]="question.key" [type]="question.type"> -->
+          <input *ngSwitchCase="'textbox'" (blur)="regInput($event,question)" attr.regtype="{{question?.regType}}"
+            [formControlName]="question.key" [id]="question.key" [type]="question.type">
+
+          <select [id]="question.key" *ngSwitchCase="'dropdown'" (blur)="regInput($event,question)"
+            [formControlName]="question.key">
+            <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+          </select>
+          <app-form-alert-textarea *ngSwitchCase="'textarea'" [question]="question"
+            (outputQuestionData)="regInput('',$event)"></app-form-alert-textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+  </form>
+
+</div>

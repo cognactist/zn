@@ -1,0 +1,43 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+}
+
+.dataTable{
+   
+    .imgLogo{
+        width: 25px;
+    }
+   
+}
+
+.tipText{
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    color: #FF2424;
+    font-size: 14px;
+}
+#addMouldModal,#checkMouldModal,#changeMouldModal{
+    .modal-content{
+       width: 480px;
+       .modal-body{
+            .checkTextarea{
+                max-height: 250px;
+               
+            }
+            textarea{
+              
+                resize:none;
+                height: 250px;
+            }
+            span{
+                width: 6em;
+            }
+       }
+     
+      
+    }
+}

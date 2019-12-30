@@ -1,0 +1,298 @@
+<div class="content">
+  <form class="contentForm row" #searchVillageForm="">
+
+
+    <div class="form-group col-3 inputStart">
+      <label for="numbers">设备编号：</label>
+      <input type="text" class="" name="numbers" #numbers="ngModel" [(ngModel)]="searchDeviceInfo.numbers"
+        placeholder="">
+
+    </div>
+    <div class="form-group col-6 inputCenter">
+      <label for="province">省份：</label>
+      <select class="" name="province" #province="ngModel" placeholder="省" [(ngModel)]="searchDeviceInfo.provinceId"
+        (ngModelChange)="getCity()">
+        <option value="">省</option>
+        <option *ngFor="let province of provinceList" value="{{province.region_id}}">{{province.region}}</option>
+
+      </select>
+      <label for="city">城市：</label>
+      <select class="" name="city" #city="ngModel" placeholder="市" [(ngModel)]="searchDeviceInfo.cityId"
+        (ngModelChange)="getDistrict()">
+        <option value="">市</option>
+        <option *ngFor="let city of cityList" value="{{city.city_id}}">{{city.city}}</option>
+      </select>
+      <label for="district">区：</label>
+      <select class="" name="district" [(ngModel)]="searchDeviceInfo.districtId" #district="ngModel" placeholder="区">
+        <option value="">区</option>
+        <option *ngFor="let district of districtList" value="{{district.district_id}}">{{district.district}}</option>
+
+      </select>
+    </div>
+
+    <div class="form-group col-3 inputEnd">
+      <label for="address">设备地址：</label>
+      <input type="text" class="" name="address" #address="ngModel" [(ngModel)]="searchDeviceInfo.address"
+        placeholder="">
+
+    </div>
+    <div class="form-group col-12 inputEnd">
+      <button type="button" class="mButton mButtonGreen" (click)="getDeviceList()">查询</button>
+      <button type="button" (click)="openAddDevice()" class="mButton mButtonGreen">新增设备</button>
+
+    </div>
+  </form>
+  <div class="dataTable">
+    <p class="tableTitle">设备列表</p>
+    <table class="table ">
+      <thead>
+        <tr>
+          <th>设备编号</th>
+          <th>省</th>
+          <th>城市</th>
+          <th>区</th>
+          <th>设备地址</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+
+      </thead>
+      <tbody *ngIf="this.total==0">
+        <tr>
+          <td colspan="7">
+            <p *ngIf="loading==false" class="noData">暂无数据······</p>
+            <p *ngIf="loading==true" class="noData">加载中······</p>
+          </td>
+
+        </tr>
+
+      </tbody>
+      <tbody *ngIf="this.total!=0">
+
+        <tr *ngFor="let device of deviceList">
+          <td>{{device.server_id}}</td>
+          <td>{{device.region}}</td>
+          <td>{{device.city}}</td>
+          <td>{{device.district}}</td>
+          <td>{{device.address_info}}</td>
+          <td *ngIf="device.server_status==0">正常</td>
+          <td *ngIf="device.server_status==1">异常</td>
+          <td>
+            <button type="button" 
+            attr.server_id="{{device.server_id}}"
+            attr.region="{{device.region}}"  
+            attr.city="{{device.city}}"
+            attr.district="{{device.district}}"
+            attr.address="{{device.address_info}}"
+            attr.server_status="{{device.server_status}}"
+            attr.organic="{{device.organic}}"
+            attr.residual="{{device.residual}}"
+            attr.recyclable="{{device.recyclable}}"
+            attr.hazardous="{{device.hazardous}}"
+            (click)="openDetails($event)"
+            class="operation mButtonGreen" data-toggle="modal">查看详情</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="6" class="navRow">
+            <span>
+              <!-- 当前显示{{(page_index-1)*10+1}}到{{(page_index-1)*10+userList.length}}项， -->
+              共{{total}}条记录
+              <!-- ，共{{totalPage}}页 -->
+            </span>
+
+            <nav aria-label="Page navigation example">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination justify-content-end">
+
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage == 1}">
+                  <a class="page-link preIcon" (click)="setPage(pager.currentPage - 1)">
+
+                  </a>
+                </li>
+                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage == page}">
+                  <a class="page-link" (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage == pager.totalPages}">
+                  <a class="page-link nextIcon" (click)="setPage(pager.currentPage + 1)">
+                  </a>
+                </li>
+
+                <li class="page-item">
+                  <span>到 </span>
+
+                </li>
+                <li class="page-item">
+                  <input type="text" class="" id="pageNumber" name="pageNumber" #pageNumber
+                    value="{{pager.currentPage}}">
+                </li>
+                <li class="page-item">
+                  <span> 页 </span>
+                </li>
+                <li class="page-item">
+                  <button type="button" class="pageSearch" (click)="setPage(pageNumber.value)">确认</button>
+                </li>
+
+              </ul>
+
+            </nav>
+
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <div class="modal fade" id="changeNameModal" tabindex="-1" role="dialog" aria-labelledby="changeNameModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="alert-header">
+
+            <h4 class="modal-title" id="changeNameModalLabel">反馈详情
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true"></span></button>
+
+            </h4>
+          </div>
+          <div class="modal-body">
+            <table>
+              <tbody>
+                <tr>
+                  <td>设备编号：</td>
+                  <td>{{deviceDetailsInfo?.numbers}}</td>
+                </tr>
+                <tr>
+                  <td>设备详细地址：</td>
+                  <td>
+                    <p>{{deviceDetailsInfo?.province}}  {{deviceDetailsInfo?.city}} {{deviceDetailsInfo?.district}}</p>
+                    <p>{{deviceDetailsInfo?.address}}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>状态：</td>
+                  <td>{{deviceDetailsInfo?.status}}</td>
+                </tr>
+                <tr>
+                  <td>设备溢满度：</td>
+                  <td>
+                    <p>湿垃圾溢满度：{{deviceDetailsInfo?.organic}}%</p>
+                    <p>干垃圾溢满度：{{deviceDetailsInfo?.residual}}%</p>
+                    <p>可回收垃圾溢满度：{{deviceDetailsInfo?.recyclable}}%</p>
+                    <p>有害垃圾溢满度：{{deviceDetailsInfo?.hazardous}}%</p>                      
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="mButton mButtonGreen" data-dismiss="modal">确定</button>
+            <button type="button" class="mButton mButtonGray" data-dismiss="modal">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+
+          <h4 class="modal-title" id="addDeviceModalLabel">新增设备
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true"></span></button>
+
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div id="tipText" #tipText>
+
+          </div>
+          <form class="form-inline" #addDeviceForm="ngForm">
+            <div class="form-group">
+              <label for="addDeviceNumbers" class="">设备编号：</label>
+              <input type="text" class="" name="addDeviceNumbers" #addDeviceNumbers="ngModel"
+                [(ngModel)]="addDeviceInfo.numbers" placeholder="请输入设备编号">
+            </div>
+            <div class="form-group">
+              <label for="addProvince">省份：</label>
+              <select class="" name="addProvince" #addProvince="ngModel" placeholder="省"
+                [(ngModel)]="addDeviceInfo.provinceId" (ngModelChange)="getCity('add')">
+                <!-- <option  value="">省</option> -->
+                <option *ngFor="let province of provinceList" value="{{province.region_id}}">{{province.region}}
+                </option>
+
+              </select>
+
+            </div>
+            <div class="form-group">
+              <label for="addCity">城市：</label>
+              <select class="" name="addCity" #addCity="ngModel" placeholder="市" [(ngModel)]="addDeviceInfo.cityId"
+                (ngModelChange)="getDistrict('add')">
+                <!-- <option selected="selected"  value="">市</option> -->
+                <option *ngFor="let city of cityList" value="{{city.city_id}}">{{city.city}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="addDistrict">区：</label>
+              <select class="" name="addDistrict" (change)="getCommunityList()" [(ngModel)]="addDeviceInfo.districtId" #addDistrict="ngModel"
+                placeholder="区">
+                <!-- <option selected="selected" value="">区</option> -->
+                <option *ngFor="let district of districtList" value="{{district.district_id}}">{{district.district}}
+                </option>
+
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="community_id">小区：</label>
+              <select class="" name="community_id" [(ngModel)]="addDeviceInfo.community_id"  #community_id="ngModel"
+                placeholder="小区">
+                <option *ngFor="let community of communityList" value="{{community.community_id}}">{{community.community}}
+                </option>
+
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="addDeviceAddress" class="">设备地址：</label>
+              <input type="text" class="" name="addDeviceAddress" #addDeviceAddress="ngModel"
+                [(ngModel)]="addDeviceInfo.address_info" placeholder="请输入设备地址">
+            </div>
+            <div class="form-group">
+              <label for="" class="">选经纬度：</label>
+                     
+              <img src="/src/assets/img/mapLogo.png" class="mapLogo" (click)="showMap()" alt="点击打开地图">
+            
+              {{addDeviceInfo.ptAddress}}
+            </div>
+          </form>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="mButton mButtonGreen" (click)="addDevice()">确定</button>
+          <button type="button" class="mButtonGreen mButtonGray" data-dismiss="modal">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="alert-header">
+
+          <h4 class="modal-title" id="addDeviceModalLabel">选择地址
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true"></span></button>
+
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div id="container"></div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="mButton mButtonGreen" (click)="chooseLongitudeAndLatitude()">确定</button>
+          <button type="button" class="mButtonGreen mButtonGray" (click)="cancelLongitudeAndLatitude()">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
