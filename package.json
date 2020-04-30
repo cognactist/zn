@@ -23,7 +23,7 @@
     "angular-tree-component": "^8.5.1",
     "bootstrap": "^3.4.1",
     "core-js": "^2.5.4",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jsrsasign": "^8.0.12",
     "ng-zorro-antd": "^8.5.0",
     "ngx-treeview": "^6.0.2",
